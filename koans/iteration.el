@@ -27,18 +27,21 @@
 variable in turn"
  (let* ((some-primes '(10301 11311 19991 999565999))
         (how-many-in-list 0)
-        (biggest-in-list (first some-primes)))
+        (biggest-in-list (cl-first some-primes)))
    "this dolist loops over some-primes, defined above"
    (dolist (one-prime some-primes)
      (if (> one-prime biggest-in-list)
          (setf biggest-in-list one-prime))
-     (incf how-many-in-list))
-   (should (equal ___ how-many-in-list))
-   (should (equal ___ biggest-in-list)))
- (let ((sum 0))
+     (cl-incf how-many-in-list))
+   (should (equal 4 how-many-in-list))
+   (should (equal 999565999 biggest-in-list)))
+ (let ((sum 0) 
+       (some-primes '(10301 11311 19991 999565999)))
    "write your own dolist here to calculate the sum of some-primes"
    "you may be interested in investigating the 'incf' function"
    ;; (dolist ... )
+   (dolist (num some-primes) 
+     (cl-incf sum num)) 
    (should (eq 999607602 sum))))
 
 
@@ -59,7 +62,7 @@ upon completion of the iteration."
 binding them in order to your selected symbol."
  (let ((out-list nil))
    (dotimes (y 3) (push y out-list))
-   (should (equal ___ out-list))))
+   (should (equal '(2 1 0) out-list))))
 
 
 (elisp-koans/deftest
@@ -68,8 +71,8 @@ binding them in order to your selected symbol."
 a global value."
  (let ((outer-var "outer"))
    (dotimes (outer-var 4)
-     (should (eq ___ (equal "outer" outer-var))))
-   (should (eq ___ (equal "outer" outer-var)))))
+     (should (eq nil (equal "outer" outer-var))))
+   (should (eq t (equal "outer" outer-var)))))
 
 
 (elisp-koans/deftest
@@ -78,30 +81,30 @@ a global value."
 Note that the loop macro includes many additional options, which
 will be covered in a future koan."
  (let ((loop-counter 0))
-   (loop
-    (incf loop-counter)
-    (if (>= loop-counter 100) (return loop-counter)))
-   (should (equal ___ loop-counter))))
+   (cl-loop
+    (cl-incf loop-counter)
+    (if (>= loop-counter 100) (cl-return loop-counter)))
+   (should (equal 100 loop-counter))))
 
 
 (elisp-koans/deftest
  elisp-koans/iteration-mapcar ()
  "`mapcar' takes a list and a function.  It returns a new list
 with the function applied to each element of the input"
-  (let ((mc-result (mapcar #'evenp '(1 2 3 4 5))))
-    (should (equal ___ mc-result))))
+  (let ((mc-result (mapcar #'cl-evenp '(1 2 3 4 5))))
+    (should (equal '(nil t nil t nil) mc-result))))
 
 ;; ----
 
 
 (defun vowelp (c)
   "Return true if `c' is a vowel."
-  (find c "AEIOUaeiou"))
+  (cl-find c "AEIOUaeiou"))
 
 (defun vowels-to-xs (my-string)
   "Convert all vowels in a string to the character `x'."
-  (coerce
-   (loop for c across my-string
+  (cl-coerce
+   (cl-loop for c across my-string
          with new-c
          do (setf new-c (if (vowelp c) ?x c))
          collect new-c)
@@ -113,7 +116,7 @@ with the function applied to each element of the input"
  (should (equal (vowels-to-xs "Astronomy") "xstrxnxmy"))
  (let* ((subjects '("Astronomy" "Biology" "Chemistry" "Linguistics"))
         (mc-result (mapcar #'vowels-to-xs subjects)))
-   (should (equal ___ mc-result))))
+   (should (equal '("xstrxnxmy" "Bxxlxgy" "Chxmxstry" "Lxngxxstxcs") mc-result))))
 
 ;; ----
 
@@ -122,6 +125,6 @@ with the function applied to each element of the input"
  elisp-koans/iteration-mapcar-with-lambda ()
  "`mapcar' can apply a `lambda' to a collection"
  (let ((mc-result (mapcar (lambda (x) (mod x 10)) '(21 152 403 14))))
-   (should (equal ___ mc-result))))
+   (should (equal '(1 2 3 4) mc-result))))
 
 ;; iteration.el ends here
