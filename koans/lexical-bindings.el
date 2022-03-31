@@ -43,12 +43,12 @@ The second takes one parameter, y, and resets x to the value of y."
  "An illustration of how lexical closures may interact."
   (let ((tangled-funs-1 (elisp-koans/two-funs 1))
         (tangled-funs-2 (elisp-koans/two-funs 2)))
-     (should (equal ___ (funcall (first tangled-funs-1))))
-     (funcall (second tangled-funs-1) 0)
-     (should (equal ___ (funcall (first tangled-funs-1))))
+     (should (equal 1 (funcall (cl-first tangled-funs-1))))
+     (funcall (cl-second tangled-funs-1) 0)
+     (should (equal 0 (funcall (cl-first tangled-funs-1))))
 
-     (should (equal ___ (funcall (first tangled-funs-2))))
-     (funcall (second tangled-funs-2) 100)
-     (should (equal ___ (funcall (first tangled-funs-2))))))
+     (should (equal 2 (funcall (cl-first tangled-funs-2))))
+     (funcall (cl-second tangled-funs-2) 100)
+     (should (equal 100 (funcall (cl-first tangled-funs-2))))))
 
 ;;; lexical-bindings.el ends here
